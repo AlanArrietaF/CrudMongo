@@ -1,6 +1,6 @@
 import express from "express";
 import cors from 'cors'
-import { obtenerTodasLasPizzasAsync, obtenerPizzaPorIdAsync } from './repositorios/pizza.repositorio.js'
+import { obtenerTodasLasPizzasAsync, obtenerPizzaPorIdAsync, agregarPizzaAsync } from './repositorios/pizza.repositorio.js'
 
 const app = express();
 app.use(cors())
@@ -21,6 +21,17 @@ app.get("/api/v1/pizzas/:id", async (req, res) => {
   const pizza = await obtenerPizzaPorIdAsync(id)
 
   return res.status(200).json(pizza);
+});
+
+app.post("/api/v1/pizzas", async (req, res) => {
+    // req.body contiene el JSON que enviaste desde Postman
+    const nuevaPizza = req.body; 
+    
+    // Llamamos a la función de Mongo que creamos
+    const resultado = await agregarPizzaAsync(nuevaPizza); 
+    
+    // Respondemos con status 201 (Creado) y el resultado
+    return res.status(201).json(resultado);
 });
 
 // Iniciar el servidor
